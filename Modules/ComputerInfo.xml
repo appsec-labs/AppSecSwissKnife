@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Module name="SSL">
+    <default>--Regular-Scan</default>
+    <Options>
+    <Option name = "--Regular-Scan">
+        <Command id="1">
+            <ToolName>Winfo-Check</ToolName>
+            <ToolCommand>Winfo-Tool</ToolCommand>
+        </Command>
+		<Command id="2">
+            <ToolName>FTP-Anon</ToolName>
+            <ToolCommand>FTP-Anon-Check</ToolCommand>
+        </Command>
+		<Command id="3">
+            <ToolName>Nmap-Open</ToolName>
+            <ToolCommand>Nmap-Open-TCP-Tool</ToolCommand>
+        </Command>
+		<Command id="3">
+            <ToolName>Nmap-Open</ToolName>
+            <ToolCommand>Nmap-Open-Tool</ToolCommand>
+        </Command>
+        <Exp>A scan for remote computer information disclosure...</Exp>
+    </Option>
+    </Options>
+	<Tools>
+	<Tool name = "Nmap-Open">
+            <Path>nmap</Path>
+            <cmd>nmap.exe</cmd>
+            <Commands>
+                <Command name = "Nmap-Open-Tool">
+                    <Arg>--open --unprivileged PyHST</Arg>
+                </Command>
+			
+            </Commands>
+	    <Filters>
+                 <FilterName>Nmap-Open-Ports</FilterName>
+        </Filters>
+	</Tool>
+	<Tool name = "Winfo-Check">
+            <Path>winfo</Path>
+            <cmd>winfo.exe</cmd>
+            <Commands>
+                <Command name = "Winfo-Tool">
+                    <Arg>PyHST -n -v</Arg>
+                </Command>
+            </Commands>
+	    <Filters>
+                 <FilterName>Local Admin</FilterName>
+            </Filters>
+	</Tool>
+	<Tool name = "FTP-Anon">
+            <Path>nmap</Path>
+            <cmd>nmap.exe</cmd>
+            <Commands>
+                <Command name = "Winfo-Tool">
+                    <Arg>-sV -sC PyHST</Arg>
+                </Command>
+            </Commands>
+	    <Filters>
+				 <FilterName>FTP Exists</FilterName>
+                 <FilterName>FTP Anon-Filter</FilterName>
+        </Filters>
+	</Tool>
+	</Tools>
+	<Filters>
+	<Filter name = "Local Admin">
+        <FilterExpressions>
+            <Expression number='1'>
+                <ToolName>Winfo-Check</ToolName>
+                <InOutput>This account is the built-in administrator account</InOutput>
+            </Expression>
+        </FilterExpressions>
+        <FilterOutput>Local Admin disclosure</FilterOutput>
+	</Filter>
+	<Filter name = "FTP Anon-Filter">
+        <FilterExpressions>
+            <Expression number='1'>
+                <ToolName>FTP-Anon</ToolName>
+                <InOutput>21/tcp open  ftp</InOutput>
+				<InOutput>Anonymous FTP login allowed</InOutput>
+            </Expression>
+        </FilterExpressions>
+        <FilterOutput>Anonymous FTP login allowed</FilterOutput>
+	</Filter>
+	<Filter name = "FTP Exists">
+        <FilterExpressions>
+            <Expression number='1'>
+                <ToolName>FTP-Exists</ToolName>
+                <InOutput>21/tcp open  ftp</InOutput>
+            </Expression>
+        </FilterExpressions>
+        <FilterOutput>FTP Server is open</FilterOutput>
+	</Filter>
+	<Filter name = "Nmap-Open-Ports">
+        <FilterExpressions>
+            <Expression number='1'>
+                <ToolName>Nmap-Open</ToolName>
+                <RegEx>
+                    <Pattern>[0-9]{1,4}/tcp[ ]{1,}open[ ]{1,}([^\s]+)</Pattern>
+                </RegEx>
+            </Expression>
+        </FilterExpressions>
+        <FilterOutput>The following port is open: {0}</FilterOutput>
+	</Filter>
+   	</Filters>
+</Module>
