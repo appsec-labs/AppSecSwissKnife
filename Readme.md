@@ -12,4 +12,4 @@ Simply copy the solution. Use the modules directory to introduce new tools and t
  
 ## License
 
-Each tool used by AppSecSwissKnife has a different license
+Each tool used by AppSecSwissKnife has a different license set by it's developer
