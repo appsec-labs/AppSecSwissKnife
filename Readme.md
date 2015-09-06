@@ -12,4 +12,4 @@ Simply copy the solution. Use the modules directory to introduce new tools and t
  
 ## License
 
-This app is developed for the use of AppSec Labs
+Each tool used by AppSecSwissKnife has a different license
