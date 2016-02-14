@@ -1,0 +1,4 @@
+console.gigya.com
+cdns.gigya.com
+comments.us1.gigya.com
+accounts.us1.gigya.com
